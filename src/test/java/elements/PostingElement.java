@@ -1,17 +1,11 @@
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.ElementsCollection;
+package elements;
+
 import com.codeborne.selenide.SelenideElement;
-import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
-import static com.codeborne.selenide.CollectionCondition.sizeLessThan;
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Condition.exist;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.$;
 
-public class PostMaker {
+public class PostingElement {
 
     private SelenideElement textHere =
             $(By.xpath(".//a[@class='pf-head_itx_a']"));

@@ -1,37 +1,19 @@
 import com.codeborne.selenide.*;
+import data.BotData;
+import elements.FriendElement;
+import elements.PostingElement;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.By;
+import pages.FeedPage;
+import pages.LoginPage;
 
 import static com.codeborne.selenide.CollectionCondition.*;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 
-public class OkPageTest {
-
-    public static String loginOfBot = "TechoBot8";
-    public static String passwordOfBot = "TechnoPolis19";
-    private static LoginPage loginPage;
-    private static FeedPage feedPage;
-    private static PostMaker postMaker;
-
-
-    @BeforeAll
-    public static void init() {
-        loginPage = new LoginPage();
-        loginPage.open();
-        feedPage = new FeedPage();
-        postMaker = new PostMaker();
-    }
-
-    @BeforeEach
-    public void before() {
-        if (!WebDriverRunner.url().equals("https://ok.ru/feed")) {
-            loginPage.typeEmail(loginOfBot);
-            loginPage.typePassword(passwordOfBot).pressEnter();
-        }
-    }
+public class OkPageTest extends BaseTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"Сообщения", "Обсуждения", "Оповещения", "Друзья", "Гости", "События", "Видео", "Музыка"})
@@ -52,7 +34,7 @@ public class OkPageTest {
 
     @Test
     public void makePost() {
-        postMaker.makeText();
+        postingElement.makeText();
         ElementsCollection toolbarActions = $$(By.xpath(".//div[@class='posting_ac_i_w']"));
         toolbarActions.shouldHave(sizeGreaterThan(4));
         toolbarActions.shouldHave(sizeLessThan(7));
@@ -61,27 +43,20 @@ public class OkPageTest {
                 "Добавить видео",
                 "Добавить музыку",
                 "Добавить опрос",
-                "Указать место"
+                "Указать место",
+                "Отметить друзей"
         ));
         final String text = "New post from test";
-        postMaker.type(text);
-        postMaker.getPostingHandler().shouldHave(text(text));
-        postMaker.selectDataEnable();
-        postMaker.submit();
+        postingElement.type(text);
+        postingElement.getPostingHandler().shouldHave(text(text));
+        postingElement.selectDataEnable();
+        postingElement.submit();
         SelenideElement post = $(By.xpath(".//div[@class='media-text_cnt_tx emoji-tx textWrap']"));
         post.shouldBe(exist).shouldHave(text(text));
         $(By.xpath(".//a[@data-l='t,removeTopic']")).click();
         refresh();
         post.shouldBe(not(exist));
         open("https://ok.ru/feed");
-    }
-
-
-    @AfterAll
-    public static void deinit() throws InterruptedException {
-        feedPage.openToolbarDropdownMenu();
-        feedPage.logout().click();
-        Thread.sleep(1000);
     }
 
 }

@@ -18,11 +18,15 @@ public class FriendElement {
 
     public ProfilePage nameClick() {
         nameXpath.click();
-        return new ProfilePage();
+        return ProfilePage.open();
     }
 
     public MessagesPage messageClick() {
         messageXpath.click();
-        return new MessagesPage();
+        return MessagesPage.open();
+    }
+
+    public String getName() {
+        return nameXpath.getText();
     }
 }
